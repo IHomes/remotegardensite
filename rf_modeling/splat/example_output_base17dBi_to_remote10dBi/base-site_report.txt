@@ -1,0 +1,21 @@
+
+	--==[ SPLAT! v1.4.1 Site Analysis Report For: base ]==--
+
+---------------------------------------------------------------------------
+
+Site location: XXX
+Ground elevation: 275.59 feet AMSL
+Antenna height: 40.00 feet AGL / 315.59 feet AMSL
+Antenna height above average terrain: -31.86 feet
+
+Average terrain at   0 degrees azimuth: 347.86 feet AMSL
+Average terrain at  45 degrees azimuth: 295.19 feet AMSL
+Average terrain at  90 degrees azimuth: 347.88 feet AMSL
+Average terrain at 135 degrees azimuth: 309.48 feet AMSL
+Average terrain at 180 degrees azimuth: 243.13 feet AMSL
+Average terrain at 225 degrees azimuth: 340.09 feet AMSL
+Average terrain at 270 degrees azimuth: 534.30 feet AMSL
+Average terrain at 315 degrees azimuth: 361.65 feet AMSL
+
+---------------------------------------------------------------------------
+

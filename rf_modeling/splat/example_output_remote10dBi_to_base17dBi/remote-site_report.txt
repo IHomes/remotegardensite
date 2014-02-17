@@ -1,0 +1,11 @@
+
+	--==[ SPLAT! v1.4.1 Site Analysis Report For: remote   ]==--
+
+---------------------------------------------------------------------------
+
+Site location: XXX
+Ground elevation: 331.36 feet AMSL
+Antenna height: 5.00 feet AGL / 336.36 feet AMSL
+
+---------------------------------------------------------------------------
+

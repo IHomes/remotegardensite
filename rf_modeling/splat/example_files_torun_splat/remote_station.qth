@@ -1,0 +1,5 @@
+#these are invalid lat/longs, you must fix before running
+remote  
+11 22 33.44 #lat 
+55 66 77.88 #long
+5 #elevation 

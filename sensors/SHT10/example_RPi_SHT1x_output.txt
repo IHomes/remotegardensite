@@ -1,0 +1,5 @@
+./RPi_SHT1x
+Temperature: 99.91 F
+Humidity: 11.97%
+
+(then returns to prompt)

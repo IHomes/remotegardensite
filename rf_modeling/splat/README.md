@@ -1,0 +1,1 @@
+In the examples a 17dBi gain base station was modeled to communicate with a 10dBi remote station.

@@ -1,0 +1,8 @@
+gawk '{print $1/1000,"degrees C"}' /sys/class/thermal/thermal_zone0/temp
+50.843 degrees C
+
+or
+
+/opt/vc/bin/vcgencmd measure_temp
+temp=50.3'C
+

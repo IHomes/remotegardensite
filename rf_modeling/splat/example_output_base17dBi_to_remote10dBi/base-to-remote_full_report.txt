@@ -1,0 +1,72 @@
+
+		--==[ SPLAT! v1.4.1 Path Analysis ]==--
+
+---------------------------------------------------------------------------
+
+Transmitter site: base
+Site location: XXX
+Ground elevation: 275.59 feet AMSL
+Antenna height: 40.00 feet AGL / 315.59 feet AMSL
+Antenna height above average terrain: -31.86 feet
+Distance to remote  : 1.64 miles
+Azimuth to remote  : 191.56 degrees
+Elevation angle to remote  : +0.1255 degrees
+Elevation angle to the first obstruction: +0.1678 degrees
+
+---------------------------------------------------------------------------
+
+Receiver site: remote  
+Site location: XXX
+Ground elevation: 331.36 feet AMSL
+Antenna height: 5.00 feet AGL / 336.36 feet AMSL
+Antenna height above average terrain: -17.03 feet
+Distance to base: 1.64 miles
+Azimuth to base: 11.56 degrees
+Depression angle to base: -0.1493 degrees
+Depression angle to the first obstruction: -0.0837 degrees
+
+---------------------------------------------------------------------------
+
+ITWOM Version 3.0 Parameters Used In This Analysis:
+
+Earth's Dielectric Constant: 15.000
+Earth's Conductivity: 0.005 Siemens/meter
+Atmospheric Bending Constant (N-units): 301.000 ppm
+Frequency: 915.000 MHz
+Radio Climate: 5 (Continental Temperate)
+Polarization: 0 (Horizontal)
+Fraction of Situations: 50.0%
+Fraction of Time: 90.0%
+Transmitter ERP: 31 Watts (+44.85 dBm)
+Transmitter EIRP: 50 Watts (+46.99 dBm)
+
+---------------------------------------------------------------------------
+
+Summary For The Link Between base and remote  :
+
+Free space path loss: 100.13 dB
+ITWOM Version 3.0 path loss: 109.52 dB
+Attenuation due to terrain shielding: 9.39 dB
+Field strength at remote  : 73.96 dBuV/meter
+Signal power level at remote  : -62.53 dBm
+Signal power density at remote  : -71.82 dBW per square meter
+Voltage across a 50 ohm dipole at remote  : 213.88 uV (46.60 dBuV)
+Voltage across a 75 ohm dipole at remote  : 261.95 uV (48.36 dBuV)
+Mode of propagation: Single Horizon Diffraction Dominant
+ITWOM error number: 0 (No error)
+
+---------------------------------------------------------------------------
+
+Between remote   and base, SPLAT! detected obstructions at:
+
+    XXX  0.22 miles, 334.65 feet AMSL
+    XXX  0.28 miles, 337.93 feet AMSL
+
+Antenna at remote   must be raised to at least 12.00 feet AGL
+to clear all obstructions detected by SPLAT!.
+
+Antenna at remote   must be raised to at least 91.00 feet AGL
+to clear the first Fresnel zone.
+
+Antenna at remote   must be raised to at least 51.00 feet AGL
+to clear 60% of the first Fresnel zone.

@@ -1,0 +1,69 @@
+
+		--==[ SPLAT! v1.4.1 Path Analysis ]==--
+
+---------------------------------------------------------------------------
+
+Transmitter site: remote  
+Site location: XXX
+Ground elevation: 331.36 feet AMSL
+Antenna height: 5.00 feet AGL / 336.36 feet AMSL
+Distance to base: 1.64 miles
+Azimuth to base: 11.56 degrees
+Depression angle to base: -0.1493 degrees
+Depression angle to the first obstruction: -0.0837 degrees
+
+---------------------------------------------------------------------------
+
+Receiver site: base
+Site location: XXX
+Ground elevation: 275.59 feet AMSL
+Antenna height: 40.00 feet AGL / 315.59 feet AMSL
+Distance to remote  : 1.64 miles
+Azimuth to remote  : 191.56 degrees
+Elevation angle to remote  : +0.1255 degrees
+Elevation angle to the first obstruction: +0.1678 degrees
+
+---------------------------------------------------------------------------
+
+ITWOM Version 3.0 Parameters Used In This Analysis:
+
+Earth's Dielectric Constant: 15.000
+Earth's Conductivity: 0.005 Siemens/meter
+Atmospheric Bending Constant (N-units): 301.000 ppm
+Frequency: 915.000 MHz
+Radio Climate: 5 (Continental Temperate)
+Polarization: 0 (Horizontal)
+Fraction of Situations: 50.0%
+Fraction of Time: 90.0%
+Transmitter ERP: 6.1 Watts (+37.85 dBm)
+Transmitter EIRP: 10.0 Watts (+39.99 dBm)
+
+---------------------------------------------------------------------------
+
+Summary For The Link Between remote   and base:
+
+Free space path loss: 100.13 dB
+ITWOM Version 3.0 path loss: 106.78 dB
+Attenuation due to terrain shielding: 6.64 dB
+Field strength at base: 69.70 dBuV/meter
+Signal power level at base: -66.78 dBm
+Signal power density at base: -76.08 dBW per square meter
+Voltage across a 50 ohm dipole at base: 131.01 uV (42.35 dBuV)
+Voltage across a 75 ohm dipole at base: 160.46 uV (44.11 dBuV)
+Mode of propagation: Single Horizon Diffraction Dominant
+ITWOM error number: 0 (No error)
+
+---------------------------------------------------------------------------
+
+Between base and remote  , SPLAT! detected obstructions at:
+
+    XXX  1.36 miles, 337.93 feet AMSL
+
+Antenna at base must be raised to at least 72.00 feet AGL
+to clear all obstructions detected by SPLAT!.
+
+Antenna at base must be raised to at least 291.00 feet AGL
+to clear the first Fresnel zone.
+
+Antenna at base must be raised to at least 198.00 feet AGL
+to clear 60% of the first Fresnel zone.

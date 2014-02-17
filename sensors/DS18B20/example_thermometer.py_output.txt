@@ -1,0 +1,8 @@
+python thermometer.py
+(35.75, 96.35)
+(35.75, 96.35)
+(35.75, 96.35)
+(35.75, 96.35)
+(35.812, 96.4616)
+
+(runs until killed, currently)
