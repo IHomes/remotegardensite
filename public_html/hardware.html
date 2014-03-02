@@ -78,28 +78,83 @@
 
 <!-- End CPU Daily High Low, Average Temp -->
 
-<!-- Case Temp -->
+<!-- test with pulling json from xively -->
+<!-- This is the only one working now with potentially live data, and its using old google chart API... -->
+
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js'></script> 
 <script type='text/javascript' src='https://www.google.com/jsapi'></script>
-    <script type='text/javascript'>
-      google.load('visualization', '1', {packages:['gauge']});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Label', 'Value'],
-          ['Case', 87]
-        ]);
-
-        var options = {
-          redFrom: 95, redTo: 130,
-          yellowFrom:90, yellowTo: 95,
-          minorTicks: 5
-        };
-
-        var chart = new google.visualization.Gauge(document.getElementById('chart_div3'));
+<script type='text/javascript'>
+ 
+    var chart; 
+    var charts;
+    var data;
+ 
+        google.load('visualization', '1', {packages:['gauge']});
+        google.setOnLoadCallback(initChart);
+ 
+    function displayData(point) {
+     
+        data.setValue(0, 0, 'Case');
+        data.setValue(0, 1, point);
         chart.draw(data, options);
-      }
-    </script>
-<!-- End Case Temp -->
+    }
+ 
+    function loadData() {
+        // variable for the data point
+        var p;
+     
+        $.getJSON('https://api.xively.com/v2/feeds/1824193320/datastreams/rpi_case.json?&key=hKcMzj9z2zXxwSKr8pvvyCdrsKnhdajFA7ocUt8xWLJOjsA8&callback=?', function(data) { //Xively
+         
+            // get the data point
+            p = data.current_value; //Xively
+                         
+            if (p) {
+                p = (p/1);
+                displayData(p);
+            }
+        });
+    }
+ 
+    function initChart() {
+        data = new google.visualization.DataTable();
+        data.addColumn('string', 'Label');
+        data.addColumn('number', 'Value');
+        data.addRows(1);
+             
+        chart = new google.visualization.Gauge(document.getElementById('chart_div3'));
+        options = {
+
+         
+            redFrom: 110, 
+            redTo: 120,
+             
+            yellowFrom: 100, 
+            yellowTo: 110, 
+             
+            greenFrom: 0, 
+            greenTo: 100, 
+             
+            minorTicks: 10,
+             
+            min: 0, 
+            max: 120, 
+             
+            animation: {
+                duration: 400, 
+                easing: 'out',
+            },
+        };
+     
+        loadData();
+ 
+        setInterval('loadData()', 15000);
+             
+    }
+</script>
+
+
+<!--- end test -->
+
 
 <!-- Daily Case High Low, Average Temp -->
 
@@ -189,8 +244,9 @@
 
             <div class="col-xs-6 col-sm-3 placeholder">
 	      <div id="chart_div3"></div>
-              <h4>Case Temp</h4>
+              <h4>Weather Station Case Temp</h4>
               <span class="text-muted">DS18B20 Sensor</span>
+	      <span class="text-muted">Only one with live data</span>
             </div>
 
 
