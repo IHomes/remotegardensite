@@ -1,0 +1,2 @@
+#example how to run if variables not located within file, but passed in like original xively tutorial
+FEED_ID=1824193320 API_KEY=2XCKLDtPAJdKhzLMAxd9FTIpPfVu4trJIhSENMsbAiYJYxze DEBUG=false python2 scriptname.py
