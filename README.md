@@ -2,6 +2,9 @@
 
 A garden monitor/weather station hosted on a Raspberry Pi. This projects goal is to monitor the remote weather station over a great distance (miles,) and post the data online.
 
+##garden_monitor
+Scripts to gather weather or hardware health data and post to xively
+
 ## public_html
 Example html for displaying data
 
