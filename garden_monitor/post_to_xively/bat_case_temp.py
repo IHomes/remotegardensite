@@ -20,13 +20,14 @@ DEBUG =''
 api = xively.XivelyAPIClient(API_KEY)
 
 #Call Thermometer script
+print datetime.datetime.now() , "starting gather_battery_case_temp.py"
 execfile("/root/garden_monitor/battery_case_temp/gather_battery_case_temp.py")
 
 
-# function to read 1 minute load average from system uptime command
+# function to read
 def read_loadavg():
   if DEBUG:
-    print "Reading load average"
+    print "Reading battery case temp..."
   return subprocess.check_output(["awk '{print $1}' lastread_bat_temp.out"], shell=True)
 
 # function to return a datastream object. This either creates a new datastream,
@@ -43,10 +44,8 @@ def get_datastream(feed):
     datastream = feed.datastreams.create("bat_case", tags="bat_01")
     return datastream
 
-# main program entry point - runs continuously updating our datastream with the
-# current 1 minute load average
+# main program entry point - runs continuously updating the datastream
 def run():
-  print "Starting Xively tutorial script"
 
   feed = api.feeds.get(FEED_ID)
 
@@ -55,6 +54,7 @@ def run():
   datastream.min_value = None
 
   while True:
+    execfile("/root/garden_monitor/battery_case_temp/gather_battery_case_temp.py")
     bat_case = read_loadavg()
 
     if DEBUG:
@@ -65,8 +65,7 @@ def run():
     try:
       datastream.update()
     except requests.HTTPError as e:
-      print "HTTPError({0}): {1}".format(e.errno, e.strerror)
-    execfile("/root/garden_monitor/battery_case_temp/gather_battery_case_temp.py")
-    time.sleep(10)
+      print datetime.datetime.now() , "HTTPError({0}): {1}".format(e.errno, e.strerror)
+    time.sleep(300)
 
 run()

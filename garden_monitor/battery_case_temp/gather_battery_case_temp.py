@@ -33,9 +33,8 @@ def read_temp():
         return temp_f
 
 while True:
-        print (read_temp())
+#       print (read_temp())
 #	time.sleep(1)
-#         break
         fo = open("lastread_bat_temp.out", "wt")
         fo.write ('{}'.format(read_temp()));
         fo.close()

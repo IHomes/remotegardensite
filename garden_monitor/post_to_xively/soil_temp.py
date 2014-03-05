@@ -19,11 +19,11 @@ DEBUG =''
 # initialize api client
 api = xively.XivelyAPIClient(API_KEY)
 
-#Call Thermometer script
-#execfile("/root/garden_monitor/soil_monitor/tempSHT1x")
+#Call SHT1x script
+print datetime.datetime.now() , "starting soil_temp.py"
 os.system("/root/garden_monitor/soil_monitor/tempSHT1x")
 
-# function to read 1 minute load average from system uptime command
+# function to read
 def read_loadavg():
   if DEBUG:
     print "Reading soil temp..."
@@ -43,10 +43,8 @@ def get_datastream(feed):
     datastream = feed.datastreams.create("soil_temp", tags="soil_02")
     return datastream
 
-# main program entry point - runs continuously updating our datastream with the
-# current 1 minute load average
+# main program entry point - runs continuously updating the datastream
 def run():
-  print "Starting Xively tutorial script"
 
   feed = api.feeds.get(FEED_ID)
 
@@ -55,6 +53,7 @@ def run():
   datastream.min_value = None
 
   while True:
+    os.system("/root/garden_monitor/soil_monitor/tempSHT1x")
     soil_temp = read_loadavg()
 
     if DEBUG:
@@ -65,8 +64,7 @@ def run():
     try:
       datastream.update()
     except requests.HTTPError as e:
-      print "HTTPError({0}): {1}".format(e.errno, e.strerror)
-    os.system("/root/garden_monitor/soil_monitor/tempSHT1x")
-    time.sleep(10)
+      print datetime.datetime.now() , "HTTPError({0}): {1}".format(e.errno, e.strerror)
+    time.sleep(1800)
 
 run()
