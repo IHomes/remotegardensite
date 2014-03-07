@@ -1,0 +1,6 @@
+﻿# This is actually goes on base device in /etc/ppp/peers
+persist      # keep active when connection drops
+maxfail 0    # no limit to connection attempts
+192.168.1.152:  # IP address of the base Raspberry Pi
+proxyarp     # proxy the remote peer on the local network
+nolog        # prevent duplicate logging

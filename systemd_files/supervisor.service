@@ -1,0 +1,9 @@
+﻿[Unit]
+Description=control progs
+After=dev-ttyAMA0.device
+After=systemd-modules-load.service
+[Service]
+ExecStart=/usr/bin/supervisord
+Type=forking
+[Install]
+WantedBy=multi-user.target

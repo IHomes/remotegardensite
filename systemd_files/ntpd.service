@@ -1,0 +1,8 @@
+﻿[Unit]
+Description=force and initial ntp sync
+After=supervisor.service
+[Service]
+ExecStart=/usr/bin/ntpdate -b -s -u pool.ntp.org
+Type=forking
+[Install]
+WantedBy=multi-user.target

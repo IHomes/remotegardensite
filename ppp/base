@@ -1,0 +1,9 @@
+﻿# This is actually goes on remote device in /etc/ppp/peers
+ttyAMA0 57600 crtscts local          # serial port settings
+init "/usr/local/bin/rpirtscts on"  # enable flow control pins
+persist                             # keep active when connection drops
+maxfail 0                           # no limit to connection attempts
+defaultroute                        # routing is via the peer
+noproxyarp
+192.168.1.157:                       # choose an IP address on the LAN
+nolog                               # prevent duplicate logging

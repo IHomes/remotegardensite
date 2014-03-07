@@ -1,0 +1,10 @@
+﻿[Unit]
+Description=PPP link to %i
+Requires=dnt900.service
+After=dnt900.service
+[Service]
+ExecStart=/usr/sbin/pppd nodetach /dev/%i call remote
+Restart=always
+SuccessExitStatus=5
+[Install]
+WantedBy=multi-user.target

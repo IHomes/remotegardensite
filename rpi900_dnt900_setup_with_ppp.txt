@@ -1,0 +1,127 @@
+﻿#---------------------------------------------
+# rpi900/dnt900/dnt2400 setup 
+#---------------------------------------------
+
+#---------------------------------------------
+# setup groups/permissions
+#---------------------------------------------
+groupadd dnt900
+usermod -a -G dnt900 root
+echo 'KERNEL=="ttyAMA0" GROUP="dnt900"' > /etc/udev/rules.d/99-ttyAMA0.rules
+udevadm trigger --sysname-match=ttyAMA0
+
+#---------------------------------------------
+# disable serial console
+#---------------------------------------------
+cat /boot/cmdline.txt
+sed -i.old 's/[^ ]*ttyAMA0[^ ]*//g' /boot/cmdline.txt
+cat /boot/cmdline.txt
+systemctl disable serial-getty@ttyAMA0.service
+
+#---------------------------------------------
+# flow control
+#---------------------------------------------
+
+cd
+git clone git://github.com/mholling/rpirtscts.git
+cd rpirtscts
+make
+cp rpirtscts /usr/local/bin/
+rpirtscts on
+stty -F /dev/ttyAMA0 crtscts
+
+#---------------------------------------------
+# dnt900 line discipline //typically just base, but used on remote sometimes
+#---------------------------------------------
+
+cd 
+git clone https://github.com/mholling/dnt900.git
+make
+make modules_install 
+depmod -a
+
+chmod 777 /dev/ttyAMA0
+echo dnt900 > /etc/modules-load.d/dnt900.conf
+
+cp ./systemd_files/dnt900.service /etc/systemd/system/dnt900.service
+
+#had a note to do this at this point
+reboot
+
+cp ./udev_rules 99-dnt900.rules_base /etc/udev/rules.d/99-dnt900.rules
+# if on remote
+# cp ./udev_rules 99-dnt900.rules_remote /etc/udev/rules.d/99-dnt900.rules
+
+#if running on remote, make sure to stop ppp service
+systemctl enable dnt900.service
+systemctl start dnt900.service
+
+
+
+
+#---------------------------------------------
+# setting up ppp on remote
+#---------------------------------------------
+
+hostnamectl set-hostname remotepi
+
+
+cp ./ppp/base /etc/ppp/peers/
+
+systemctl enable ppp@base.service
+
+cp ./ppp/pap-secrets_remote /etc/ppp/pap-secrets
+
+
+#---------------------------------------------
+# setting up ppp on base
+#---------------------------------------------
+
+hostnamectl set-hostname basepi
+
+cp ./ppp/remote /etc/ppp/peers/
+
+cp ./systemd_files/ppp-remote@.service /etc/systemd/system/
+
+cp ./ppp/pap-secrets_base /etc/ppp/pap-secrets
+
+echo 'net.ipv4.conf.eth0.proxy_arp = 1' >> /etc/sysctl.d/99-sysctl.conf
+echo 'net.ipv4.ip_forward = 1' >> /etc/sysctl.d/99-sysctl.conf
+
+#---------------------------------------------
+# DNS resolution
+#---------------------------------------------
+
+echo >> /etc/resolvconf.conf
+echo name_servers=8.8.8.8 >> /etc/resolvconf.conf
+resolvconf -u
+
+#---------------------------------------------
+# Not sure required, maybe done during troubleshooting
+# noticed out of date already (gets out of date on pacman update)
+#---------------------------------------------
+
+cd /usr/src
+ln -s linux-3.10.25-1-ARCH linux #or whatever latest
+cd /lib/modules/3.10.25-1-ARCH/
+ln -s /usr/src/linux build
+
+#---------------------------------------------
+# Did not end up using, maybe done during troubleshooting
+# Setting Static (ethernet-static file would need to be configured)
+#---------------------------------------------
+
+cd /etc/netctl
+netctl enable ethernet-static
+systemctl disable dhcpcd@eth0.service
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,2 @@
+﻿SUBSYSTEM=="tty" SUBSYSTEMS=="dnt900" GROUP="dnt900" SYMLINK+="$attr{MacAddress}"
+SUBSYSTEM=="tty" SUBSYSTEMS=="dnt900" RUN+="/usr/bin/systemctl start ppp-remote@%k"

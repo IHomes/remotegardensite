@@ -1,0 +1,11 @@
+﻿[Unit]
+Description=DNT900 line discipline on ttyAMA0
+After=dev-ttyAMA0.device
+After=systemd-modules-load.service
+[Service]
+ExecStartPre=/usr/local/bin/rpirtscts on
+ExecStartPre=/usr/bin/stty -F /dev/ttyAMA0 crtscts
+ExecStart=/usr/bin/ldattach -8n1 -s 57600 29 /dev/ttyAMA0
+Type=forking
+[Install]
+WantedBy=multi-user.target
