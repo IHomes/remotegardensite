@@ -2,6 +2,8 @@
 # rpi900/dnt900/dnt2400 setup 
 #---------------------------------------------
 
+This is somewhat specific to a particular base/remote setup; http://rpi900.com/ is the source for all this information and a much better reference than this document.
+
 #---------------------------------------------
 # setup groups/permissions
 #---------------------------------------------
