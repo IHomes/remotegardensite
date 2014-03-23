@@ -12,7 +12,8 @@ rpi900_dnt900_setup_with_ppp.txt (Summary steps, see http://rpi900.com/ for full
 Scripts to gather weather or hardware health data and post to xively
 
 ## public_html
-Example html for displaying data
+Example html for displaying data.
+-Historical displays powered by https://github.com/jasonneylon/xively-rickshaw
 
 ## sensors
 Sensors and supporting scripts used in the remote garden monitor
