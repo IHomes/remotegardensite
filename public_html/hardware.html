@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="Remote Garden Sensor" content="">
     <meta name="GeekSkunk" content="">
+    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js'></script>
+    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+
     <link rel="shortcut icon" href="favicon.ico">
 
     <title>MyGardenSpy</title>
@@ -25,72 +28,164 @@
 
 
 <!-- CPU Temp -->
-<script type='text/javascript' src='https://www.google.com/jsapi'></script>
-    <script type='text/javascript'>
-      google.load('visualization', '1', {packages:['gauge']});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Label', 'Value'],
-          ['CPU', 46]
-        ]);
 
-        var options = {
-          redFrom: 80, redTo: 100,
-          yellowFrom:60, yellowTo: 80,
-          minorTicks: 5
+<script type='text/javascript'>
+        google.load('visualization', '1', {packages:['gauge']});     
+        google.setOnLoadCallback(initChart);
+        google.setOnLoadCallback(initChart2);       
+        
+    var chart; 
+    var chart2;
+    var charts;
+    var data;
+    var data2;
+ 
+    function displayData(point) {
+     
+        data.setValue(0, 0, 'Cpu');
+        data.setValue(0, 1, point);    
+        chart.draw(data, options);     
+    }
+ 
+   function displayData2(point) {
+     
+        data2.setValue(0, 0, 'Test');
+        data2.setValue(0, 1, point);    
+        chart2.draw(data, options);  
+    }
+ 
+ 
+    function loadData() {
+        // variable for the data point
+        var p;
+     
+        $.getJSON('https://api.xively.com/v2/feeds/1824193320/datastreams/cpu_temp.json?&key=hKcMzj9z2zXxwSKr8pvvyCdrsKnhdajFA7ocUt8xWLJOjsA8&callback=?', function(data) {
+            // get the data point from Xively
+            p = data.current_value;
+                         
+            if (p) {
+                p = (p/1);
+                displayData(p);
+            }
+        });
+    }
+ 
+ 
+    function initChart() {
+        data = new google.visualization.DataTable();
+        data.addColumn('string', 'Label');
+        data.addColumn('number', 'Value');
+        data.addRows(1);
+        chart = new google.visualization.Gauge(document.getElementById('chart_div1'));
+
+        options = {
+
+         
+            redFrom: 60, 
+            redTo: 80,
+             
+            yellowFrom: 50, 
+            yellowTo: 60, 
+            
+            greenFrom: 0, 
+            greenTo: 50, 
+             
+            minorTicks: 10,
+             
+            min: 0, 
+            max: 80, 
+             
+            animation: {
+                duration: 400, 
+                easing: 'out',
+            },
         };
 
-        var chart = new google.visualization.Gauge(document.getElementById('chart_div1'));
-        chart.draw(data, options);
-      }
-    </script>
-<!-- CPU Air Temp -->
+
+  loadData();
+ 
+        setInterval('loadData()', 1200000);
 
 
-<!-- Daily CPU High Low, Average Temp -->
+  loadData2();
+ 
+        setInterval('loadData2()', 1250000);
 
- <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-      google.load('visualization', '1', {packages: ['corechart']});
-    </script>
-    <script type="text/javascript">
-      function drawVisualization() {
-        // Some raw data (not necessarily accurate)
-        var data = google.visualization.arrayToDataTable([
-          ['Today', 'High', 'Low', 'Average'],
-          ['',  55, 48, 52]
-        ]);
+}
+//     function displayData(point) {
+     
+//        data2.setValue(0, 0, 'Test');
+//        data2.setValue(0, 1, point);    
+//        chart2.draw(data2, options);
+//    }
+ 
+ 
+ 
 
-        var options = {
-          legend: 'none',
-          vAxis: {title: "Deg C"},
-          hAxis: {title: "Today"},
-          seriesType: "bars",
-          series: {5: {type: "line"}}
+    function loadData2() {
+        // variable for the data point
+        var z;
+     
+        $.getJSON('https://api.xively.com/v2/feeds/1824193320/datastreams/rpi_case.json?&key=hKcMzj9z2zXxwSKr8pvvyCdrsKnhdajFA7ocUt8xWLJOjsA8&callback=?', function(data2) {
+            // get the data point from Xively
+            z = data2.current_value;
+                         
+            if (z) {
+                z = (z/1);
+                displayData2(z);
+            }
+        });
+
+   
+    function initChart2() {
+        data2 = new google.visualization.DataTable();
+        data2.addColumn('string', 'Label');
+        data2.addColumn('number', 'Value');
+        data2.addRows(1);
+
+        chart2 = new google.visualization.Gauge(document.getElementById('chart_div2'));
+
+        options = {
+
+         
+            redFrom: 60, 
+            redTo: 80,
+             
+            yellowFrom: 50, 
+            yellowTo: 60, 
+            
+            greenFrom: 0, 
+            greenTo: 50, 
+             
+            minorTicks: 10,
+             
+            min: 0, 
+            max: 80, 
+             
+            animation: {
+                duration: 400, 
+                easing: 'out',
+            },
         };
 
-        var chart = new google.visualization.ComboChart(document.getElementById('chart_div2'));
-        chart.draw(data, options);
-      }
-      google.setOnLoadCallback(drawVisualization);
-    </script>
+}
+}
 
-<!-- End CPU Daily High Low, Average Temp -->
+ 
 
-<!-- test with pulling json from xively -->
-<!-- This is the only one working now with potentially live data, and its using old google chart API... -->
+</script>
 
-<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js'></script> 
-<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+
+
+<!-- RPi Case
 <script type='text/javascript'>
  
     var chart; 
     var charts;
     var data;
  
-        google.load('visualization', '1', {packages:['gauge']});
-        google.setOnLoadCallback(initChart);
+ //       google.load('visualization', '1', {packages:['gauge']});
+ //       google.setOnLoadCallback(initChart);
  
     function displayData(point) {
      
@@ -103,10 +198,9 @@
         // variable for the data point
         var p;
      
-        $.getJSON('https://api.xively.com/v2/feeds/1824193320/datastreams/rpi_case.json?&key=hKcMzj9z2zXxwSKr8pvvyCdrsKnhdajFA7ocUt8xWLJOjsA8&callback=?', function(data) { //Xively
-         
-            // get the data point
-            p = data.current_value; //Xively
+        $.getJSON('https://api.xively.com/v2/feeds/1824193320/datastreams/rpi_case.json?&key=hKcMzj9z2zXxwSKr8pvvyCdrsKnhdajFA7ocUt8xWLJOjsA8&callback=?', function(data) {
+            // get the data point from Xively
+            p = data.current_value;
                          
             if (p) {
                 p = (p/1);
@@ -120,8 +214,9 @@
         data.addColumn('string', 'Label');
         data.addColumn('number', 'Value');
         data.addRows(1);
-             
-        chart = new google.visualization.Gauge(document.getElementById('chart_div3'));
+
+        chart = new google.visualization.Gauge(document.getElementById('chart_div2'));
+
         options = {
 
          
@@ -130,7 +225,7 @@
              
             yellowFrom: 100, 
             yellowTo: 110, 
-             
+            
             greenFrom: 0, 
             greenTo: 100, 
              
@@ -147,18 +242,15 @@
      
         loadData();
  
-        setInterval('loadData()', 15000);
+        setInterval('loadData()', 1200000);
              
     }
-</script>
-
-
-<!--- end test -->
+</script> -->
 
 
 <!-- Daily Case High Low, Average Temp -->
 
- <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
       google.load('visualization', '1', {packages: ['corechart']});
     </script>
@@ -204,6 +296,9 @@
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-left">
+            <li><a href="index.html">Current Conditions</a></li>
+            <li><a href="historical.html">Historical Data</a></li>
+            <li><a href="hardware.html">Hardware Status</a></li>
             <li><a href="about.html">About</a></li>
           </ul>
           </form>
@@ -218,6 +313,10 @@
             <li><a href="index.html">Current Conditions</a></li>
             <li><a href="historical.html">Historical Data</a></li>
             <li class="active"><a href="hardware.html">Hardware Status</a></li>
+            <li class="active"><a href="hardware_test1.html">hardware_test1</a></li>
+            <li class="active"><a href="hardware_test2.html">hardware_test2</a></li>
+            <li class="active"><a href="hardware_test3.html">hardware_test3</a></li>            
+            <li class="active"><a href="hardware_test4.html">hardware_test4</a></li>       
           </ul>
         </div>
 
@@ -232,32 +331,38 @@
 
             <div class="col-xs-6 col-sm-3 placeholder">
               <div id="chart_div1"></div>
-              <h4>CPU Temp</h4>
-              <span class="text-muted">Raspberry Pi</span>
+              <h4>CPU Temp °C </h4>
+              <span class="text-muted">Remote Weather Station Raspberry Pi</span>
             </div>
 
             <div class="col-xs-6 col-sm-3 placeholder">
 	      <div id="chart_div2"></div>
-              <h4>Daily CPU Temp High/Low/Average</h4>
-              <span class="text-muted">Raspberry Pi</span>
-            </div>
-
-            <div class="col-xs-6 col-sm-3 placeholder">
-	      <div id="chart_div3"></div>
-              <h4>Weather Station Case Temp</h4>
-              <span class="text-muted">DS18B20 Sensor</span>
-	      <span class="text-muted">Only one with live data</span>
+              <h4>Case Temp °F</h4>
+              <span class="text-muted">Weather Station DS18B20 Sensor</span>
             </div>
 
 
             <div class="col-xs-6 col-sm-3 placeholder">
-	      <div id="chart_div4"></div>
+	      <div id="visualization1"></div>
               <h4>Daily Case Temp High/Low/Average</h4>
               <span class="text-muted">DS18B20 Sensor</span>
             </div>
 
    
           </div>
+
+<!-- PNG Xively Calls-->
+<img src=https://api.xively.com/v2/feeds/1824193320/datastreams/rpi_case.png?w=400&h=200&c=2188c5&g=true&t=Last%2024%20Hrs%20Weather%20Station%20Case%20Temp&b=true&duration=1day&scale=Datastream&timezone=-05&l=Internal%20Case%20Temperature%20%C2%B0F />
+ 
+<img src=https://api.xively.com/v2/feeds/1824193320/datastreams/bat_case.png?w=400&h=200&c=2188c5&g=true&t=Last%2024%20Hrs%20Battery%20Case%20Temp&b=true&duration=1day&scale=Datastream&timezone=-05&l=Internal%20Case%20Temperature%20%C2%B0F />
+ 
+<!-- PNG Xively Calls-->       
+
+          <div class="row placeholders">
+          </div>	
+          <span class="text-muted">The following is a experiment with an interactive Plot.ly graph.</span>
+<iframe height="310" id="igraph" scrolling="no" seamless="seamless" src="https://plot.ly/~geekskunk/5/" width="510"></iframe>
+
 
  <!-- Could be a table of historical data, perhaps nice if exportable
         <h2 class="sub-header">Section title</h2>
@@ -290,9 +395,10 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/docs.min.js"></script>
+
 
 <!-- Google Analytics -->
 <script>
