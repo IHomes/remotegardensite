@@ -27,35 +27,29 @@
     <![endif]-->
 
 
-<!-- CPU Temp -->
+<!-- Google Charts -->
 
 <script type='text/javascript'>
-        google.load('visualization', '1', {packages:['gauge']});     
-        google.setOnLoadCallback(initChart);
-        google.setOnLoadCallback(initChart2);       
+    google.load('visualization', '1', {packages:['gauge']});     
+    google.setOnLoadCallback(initCharts);
         
-    var chart; 
-    var chart2;
-    var charts;
-    var data;
+    var chart1; //rpi cpu temp
+    var chart2; //station case temp
+    var chart3; //battery case temp
+    
+    var data1;
     var data2;
+    var data3;
  
-    function displayData(point) {
+    function displayData1(point) {
      
-        data.setValue(0, 0, 'Cpu');
-        data.setValue(0, 1, point);    
-        chart.draw(data, options);     
+        data1.setValue(0, 0, 'CPU');
+        data1.setValue(0, 1, point);    
+        chart1.draw(data1, options1);     
     }
+
  
-   function displayData2(point) {
-     
-        data2.setValue(0, 0, 'Test');
-        data2.setValue(0, 1, point);    
-        chart2.draw(data, options);  
-    }
- 
- 
-    function loadData() {
+    function loadData1() {
         // variable for the data point
         var p;
      
@@ -65,22 +59,20 @@
                          
             if (p) {
                 p = (p/1);
-                displayData(p);
+                displayData1(p);
             }
         });
     }
  
- 
-    function initChart() {
-        data = new google.visualization.DataTable();
-        data.addColumn('string', 'Label');
-        data.addColumn('number', 'Value');
-        data.addRows(1);
-        chart = new google.visualization.Gauge(document.getElementById('chart_div1'));
-
-        options = {
-
-         
+    function initChart1() {
+        data1 = new google.visualization.DataTable();
+        data1.addColumn('string', 'Label');
+        data1.addColumn('number', 'Value');
+        data1.addRows(1);
+        chart1 = new google.visualization.Gauge(document.getElementById('chart_div1'));
+//RPi CPU temps chart options
+        options1 = {
+  
             redFrom: 60, 
             redTo: 80,
              
@@ -102,41 +94,33 @@
         };
 
 
-  loadData();
+        loadData1();
  
-        setInterval('loadData()', 1200000);
+        setInterval('loadData1()', 1210000);
 
+    }
 
-  loadData2();
- 
-        setInterval('loadData2()', 1250000);
-
-}
-//     function displayData(point) {
-     
-//        data2.setValue(0, 0, 'Test');
-//        data2.setValue(0, 1, point);    
-//        chart2.draw(data2, options);
-//    }
- 
- 
- 
+    function displayData2(point) {
+        data2.setValue(0, 0, 'Case');
+        data2.setValue(0, 1, point);    
+        chart2.draw(data2, options2);  
+    }
 
     function loadData2() {
         // variable for the data point
-        var z;
+        var p;
      
-        $.getJSON('https://api.xively.com/v2/feeds/1824193320/datastreams/rpi_case.json?&key=hKcMzj9z2zXxwSKr8pvvyCdrsKnhdajFA7ocUt8xWLJOjsA8&callback=?', function(data2) {
+        $.getJSON('https://api.xively.com/v2/feeds/1824193320/datastreams/rpi_case.json?&key=hKcMzj9z2zXxwSKr8pvvyCdrsKnhdajFA7ocUt8xWLJOjsA8&callback=?', function(data) {
             // get the data point from Xively
-            z = data2.current_value;
-                         
-            if (z) {
-                z = (z/1);
-                displayData2(z);
+            p = data.current_value;
+
+            if (p) {
+                p = (p/1);
+                displayData2(p);
             }
         });
+    }
 
-   
     function initChart2() {
         data2 = new google.visualization.DataTable();
         data2.addColumn('string', 'Label');
@@ -144,23 +128,25 @@
         data2.addRows(1);
 
         chart2 = new google.visualization.Gauge(document.getElementById('chart_div2'));
-
-        options = {
-
+/*
+weather station case temp chart options
+green/yellow/red yet to be determined, these values estimates at this point
+*/
+        options2 = {
          
-            redFrom: 60, 
-            redTo: 80,
+            redFrom: 128, 
+            redTo: 150,
              
-            yellowFrom: 50, 
-            yellowTo: 60, 
+            yellowFrom: 110, 
+            yellowTo: 128, 
             
             greenFrom: 0, 
-            greenTo: 50, 
+            greenTo: 110, 
              
             minorTicks: 10,
              
             min: 0, 
-            max: 80, 
+            max: 150, 
              
             animation: {
                 duration: 400, 
@@ -168,117 +154,79 @@
             },
         };
 
-}
-}
-
+        loadData2();
  
+        setInterval('loadData2()', 1220000);
 
-</script>
-
-
-
-<!-- RPi Case
-<script type='text/javascript'>
- 
-    var chart; 
-    var charts;
-    var data;
- 
- //       google.load('visualization', '1', {packages:['gauge']});
- //       google.setOnLoadCallback(initChart);
- 
-    function displayData(point) {
-     
-        data.setValue(0, 0, 'Case');
-        data.setValue(0, 1, point);
-        chart.draw(data, options);
     }
- 
-    function loadData() {
+
+    function initCharts() {
+       initChart1();
+       initChart2();
+       initChart3();
+    }
+    
+    function displayData3(point) {
+        data3.setValue(0, 0, 'Battery');
+        data3.setValue(0, 1, point);    
+        chart3.draw(data3, options3);  
+    }
+
+    function loadData3() {
         // variable for the data point
         var p;
      
-        $.getJSON('https://api.xively.com/v2/feeds/1824193320/datastreams/rpi_case.json?&key=hKcMzj9z2zXxwSKr8pvvyCdrsKnhdajFA7ocUt8xWLJOjsA8&callback=?', function(data) {
+        $.getJSON('https://api.xively.com/v2/feeds/1824193320/datastreams/bat_case.json?&key=hKcMzj9z2zXxwSKr8pvvyCdrsKnhdajFA7ocUt8xWLJOjsA8&callback=?', function(data) {
             // get the data point from Xively
             p = data.current_value;
-                         
+
             if (p) {
                 p = (p/1);
-                displayData(p);
+                displayData3(p);
             }
         });
     }
- 
-    function initChart() {
-        data = new google.visualization.DataTable();
-        data.addColumn('string', 'Label');
-        data.addColumn('number', 'Value');
-        data.addRows(1);
 
-        chart = new google.visualization.Gauge(document.getElementById('chart_div2'));
+    function initChart3() {
+        data3 = new google.visualization.DataTable();
+        data3.addColumn('string', 'Label');
+        data3.addColumn('number', 'Value');
+        data3.addRows(1);
 
-        options = {
-
+        chart3 = new google.visualization.Gauge(document.getElementById('chart_div3'));
+/*
+Battery temp chart options
+green/yellow/red based on my model Solar charge controller
+*/
+        options3 = {
          
-            redFrom: 110, 
-            redTo: 120,
+            redFrom: 178, 
+            redTo: 200,
              
-            yellowFrom: 100, 
-            yellowTo: 110, 
+            yellowFrom: 140, 
+            yellowTo: 178, 
             
             greenFrom: 0, 
-            greenTo: 100, 
+            greenTo: 140, 
              
             minorTicks: 10,
              
             min: 0, 
-            max: 120, 
+            max: 200, 
              
             animation: {
                 duration: 400, 
                 easing: 'out',
             },
         };
-     
-        loadData();
+
+        loadData3();
  
-        setInterval('loadData()', 1200000);
-             
+        setInterval('loadData3()', 1230000);
+
     }
-</script> -->
 
-
-<!-- Daily Case High Low, Average Temp -->
-
-	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-      google.load('visualization', '1', {packages: ['corechart']});
-    </script>
-    <script type="text/javascript">
-      function drawVisualization() {
-        // Some raw data (not necessarily accurate)
-        var data = google.visualization.arrayToDataTable([
-          ['Today', 'High', 'Low', 'Average'],
-          ['',  97, 74, 88]
-        ]);
-
-        var options = {
-          legend: 'none',
-          vAxis: {title: "Deg F"},
-          hAxis: {title: "Today"},
-          seriesType: "bars",
-          series: {5: {type: "line"}}
-        };
-
-        var chart = new google.visualization.ComboChart(document.getElementById('chart_div4'));
-        chart.draw(data, options);
-      }
-      google.setOnLoadCallback(drawVisualization);
-    </script>
-
-<!-- End CPU Daily High Low, Average Temp -->
-
-
+</script>
 
   </head>
 
@@ -312,90 +260,58 @@
           <ul class="nav nav-sidebar">
             <li><a href="index.html">Current Conditions</a></li>
             <li><a href="historical.html">Historical Data</a></li>
-            <li class="active"><a href="hardware.html">Hardware Status</a></li>
-            <li class="active"><a href="hardware_test1.html">hardware_test1</a></li>
-            <li class="active"><a href="hardware_test2.html">hardware_test2</a></li>
-            <li class="active"><a href="hardware_test3.html">hardware_test3</a></li>            
-            <li class="active"><a href="hardware_test4.html">hardware_test4</a></li>       
+            <li class="active"><a href="hardware.html">Hardware Status</a></li>    
           </ul>
         </div>
 
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Hardware Status</h1>
-          <span class="text-muted">A means to monitor the core hardware used in the remote station </span>
+          <h1 class="page-header">Weather Station Hardware Status</h1>
+          <span class="text-muted">A means to monitor the core hardware used in the weather station.</span>
+
 <!-- Might be nice to reflect the last time the results were updated  date/time-->
           <div class="row placeholders">
-
-<!--Case temp Fahrenheit, CPU will be Celcius, might be nice to reflect this, but perhaps only I will care-->
 
             <div class="col-xs-6 col-sm-3 placeholder">
               <div id="chart_div1"></div>
               <h4>CPU Temp °C </h4>
-              <span class="text-muted">Remote Weather Station Raspberry Pi</span>
+              <span class="text-muted">CPU temperature of Raspberry Pi controlling the weather station</span>
             </div>
 
             <div class="col-xs-6 col-sm-3 placeholder">
 	      <div id="chart_div2"></div>
               <h4>Case Temp °F</h4>
-              <span class="text-muted">Weather Station DS18B20 Sensor</span>
+              <span class="text-muted">DS18B20 temperature sensor located in weather station enclosure</span>
             </div>
 
-
             <div class="col-xs-6 col-sm-3 placeholder">
-	      <div id="visualization1"></div>
-              <h4>Daily Case Temp High/Low/Average</h4>
-              <span class="text-muted">DS18B20 Sensor</span>
+	      <div id="chart_div3"></div>
+              <h4>Battery Temp °F</h4>
+              <span class="text-muted">DS18B20 temperature sensor located in battery enclosure</span>
             </div>
 
    
           </div>
 
-<!-- PNG Xively Calls-->
+
+<!-- PNG Xively Calls
 <img src=https://api.xively.com/v2/feeds/1824193320/datastreams/rpi_case.png?w=400&h=200&c=2188c5&g=true&t=Last%2024%20Hrs%20Weather%20Station%20Case%20Temp&b=true&duration=1day&scale=Datastream&timezone=-05&l=Internal%20Case%20Temperature%20%C2%B0F />
  
 <img src=https://api.xively.com/v2/feeds/1824193320/datastreams/bat_case.png?w=400&h=200&c=2188c5&g=true&t=Last%2024%20Hrs%20Battery%20Case%20Temp&b=true&duration=1day&scale=Datastream&timezone=-05&l=Internal%20Case%20Temperature%20%C2%B0F />
  
-<!-- PNG Xively Calls-->       
+<!-- PNG Xively Calls    -->   
 
           <div class="row placeholders">
           </div>	
-          <span class="text-muted">The following is a experiment with an interactive Plot.ly graph.</span>
-<iframe height="310" id="igraph" scrolling="no" seamless="seamless" src="https://plot.ly/~geekskunk/5/" width="510"></iframe>
+          <span class="text-muted">The following is a experiment with an interactive Plot.ly graph of the base station Raspberry Pi CPU Temp.</span>
+<iframe height="510" id="igraph" scrolling="no" seamless="seamless" src="https://plot.ly/~geekskunk/5/" width="610"></iframe>
 
 
- <!-- Could be a table of historical data, perhaps nice if exportable
-        <h2 class="sub-header">Section title</h2>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1,015</td>
-                  <td>sodales</td>
-                  <td>ligula</td>
-                  <td>in</td>
-                  <td>libero</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>  -->
-
+ 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/docs.min.js"></script>
 

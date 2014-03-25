@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="Remote Garden Sensor" content="">
     <meta name="GeekSkunk" content="">
+    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js'></script>
+    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+
     <link rel="shortcut icon" href="favicon.ico">
 
     <title>MyGardenSpy</title>
@@ -23,119 +26,206 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+<!-- Google Charts -->
 
-<!-- Air Temp 
-Ref: https://google-developers.appspot.com/chart/interactive/docs/gallery/gauge
--->
-<script type='text/javascript' src='https://www.google.com/jsapi'></script>
-    <script type='text/javascript'>
-      google.load('visualization', '1', {packages:['gauge']});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Label', 'Value'],
-          ['Air', 45]
-        ]);
+<script type='text/javascript'>
+    google.load('visualization', '1', {packages:['gauge']});     
+    google.setOnLoadCallback(initCharts);
+        
+    var chart1; //garden air temp
+    var chart2; //garden ground temp
+    var chart3; //soil moisture
+    
+    var data1;
+    var data2;
+    var data3;
+ 
+    function displayData1(point) {
+     
+        data1.setValue(0, 0, 'Air');
+        data1.setValue(0, 1, point);    
+        chart1.draw(data1, options1);     
+    }
 
-        var options = {
-          redFrom: 0, redTo: 29,
-          yellowFrom:29, yellowTo: 35,
-          minorTicks: 5
+ 
+    function loadData1() {
+        // variable for the data point
+        var p;
+     
+        $.getJSON('https://api.xively.com/v2/feeds/1824193320/datastreams/air_temp.json?&key=hKcMzj9z2zXxwSKr8pvvyCdrsKnhdajFA7ocUt8xWLJOjsA8&callback=?', function(data) {
+            // get the data point from Xively
+            p = data.current_value;
+                         
+            if (p) {
+                p = (p/1);
+                displayData1(p);
+            }
+        });
+    }
+ 
+    function initChart1() {
+        data1 = new google.visualization.DataTable();
+        data1.addColumn('string', 'Label');
+        data1.addColumn('number', 'Value');
+        data1.addRows(1);
+        chart1 = new google.visualization.Gauge(document.getElementById('chart_div1'));
+//air temps chart options
+        options1 = {
+
+            redFrom: 0, 
+            redTo: 30,
+             
+            yellowFrom: 30, 
+            yellowTo: 38, 
+            
+            greenFrom: 38, 
+            greenTo: 100, 
+             
+            minorTicks: 10,
+             
+            min: 0, 
+            max: 120, 
+             
+            animation: {
+                duration: 400, 
+                easing: 'out',
+            },
         };
 
-        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      }
-    </script>
-<!-- End Air Temp -->
 
+        loadData1();
+ 
+        setInterval('loadData1()', 1210000);
 
-<!-- Daily High Low, Average Temp
-Ref: https://google-developers.appspot.com/chart/interactive/docs/gallery/combochart -->
+    }
 
- <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-      google.load('visualization', '1', {packages: ['corechart']});
-    </script>
-    <script type="text/javascript">
-      function drawVisualization() {
-        // Some raw data (not necessarily accurate)
-        var data = google.visualization.arrayToDataTable([
-          ['Today', 'High', 'Low', 'Average'],
-          ['',  59, 29, 49]
-        ]);
+    function displayData2(point) {
+        data2.setValue(0, 0, 'Soil');
+        data2.setValue(0, 1, point);    
+        chart2.draw(data2, options2);  
+    }
 
-        var options = {
-          legend: 'none',
-          vAxis: {title: "Deg F"},
-          hAxis: {title: "Today"},
-          seriesType: "bars",
-          series: {5: {type: "line"}}
+    function loadData2() {
+        // variable for the data point
+        var p;
+     
+        $.getJSON('https://api.xively.com/v2/feeds/1824193320/datastreams/soil_temp.json?&key=hKcMzj9z2zXxwSKr8pvvyCdrsKnhdajFA7ocUt8xWLJOjsA8&callback=?', function(data) {
+            // get the data point from Xively
+            p = data.current_value;
+
+            if (p) {
+                p = (p/1);
+                displayData2(p);
+            }
+        });
+    }
+
+    function initChart2() {
+        data2 = new google.visualization.DataTable();
+        data2.addColumn('string', 'Label');
+        data2.addColumn('number', 'Value');
+        data2.addRows(1);
+
+        chart2 = new google.visualization.Gauge(document.getElementById('chart_div2'));
+/*
+soil temp chart options
+green/yellow/red yet to be determined, these values estimates at this point
+*/
+        options2 = {
+         
+            redFrom: 0, 
+            redTo: 34,
+             
+            yellowFrom: 34, 
+            yellowTo: 40, 
+            
+            greenFrom: 40, 
+            greenTo: 110, 
+             
+            minorTicks: 10,
+             
+            min: 0, 
+            max: 110, 
+             
+            animation: {
+                duration: 400, 
+                easing: 'out',
+            },
         };
 
-        var chart = new google.visualization.ComboChart(document.getElementById('chart_div1'));
-        chart.draw(data, options);
-      }
-      google.setOnLoadCallback(drawVisualization);
-    </script>
+        loadData2();
+ 
+        setInterval('loadData2()', 1220000);
 
-<!-- End Daily High Low, Average Temp -->
+    }
 
+    function initCharts() {
+       initChart1();
+       initChart2();
+       initChart3();
+    }
+    
+    function displayData3(point) {
+        data3.setValue(0, 0, 'Moisture');
+        data3.setValue(0, 1, point);    
+        chart3.draw(data3, options3);  
+    }
 
-<!-- Moisture Sensor data 
-Ref: https://google-developers.appspot.com/chart/interactive/docs/gallery/piechart -->
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-      google.load("visualization", "1", {packages:["corechart"]});
-      google.setOnLoadCallback(drawChart);
-    function drawChart() {
-    var data = new google.visualization.arrayToDataTable([
-          ['soilm', 'Percentage'],
-          ['75 %', 75],
-          ['', 25],
-        ]);
-        var options = {
-          legend: 'none',
-          pieSliceText: 'label',
-          pieStartAngle: 0,
-          tooltip: { trigger: 'none' },
-          slices: {
-            0: { color: 'blue' },
-            1: { color: 'transparent' }
-          }
+    function loadData3() {
+        // variable for the data point
+        var p;
+     
+        $.getJSON('https://api.xively.com/v2/feeds/1824193320/datastreams/soil_moist.json?&key=hKcMzj9z2zXxwSKr8pvvyCdrsKnhdajFA7ocUt8xWLJOjsA8&callback=?', function(data) {
+            // get the data point from Xively
+            p = data.current_value;
+
+            if (p) {
+                p = (p/1);
+                displayData3(p);
+            }
+        });
+    }
+
+    function initChart3() {
+        data3 = new google.visualization.DataTable();
+        data3.addColumn('string', 'Label');
+        data3.addColumn('number', 'Value');
+        data3.addRows(1);
+
+        chart3 = new google.visualization.Gauge(document.getElementById('chart_div3'));
+/*
+Soil Moisture chart options
+green/yellow/red based on my model Solar charge controller
+*/
+        options3 = {
+         
+            redFrom: 0, 
+            redTo: 20,
+             
+            yellowFrom: 20, 
+            yellowTo: 30, 
+            
+            greenFrom: 30, 
+            greenTo: 80, 
+             
+            minorTicks: 10,
+             
+            min: 0, 
+            max: 100, 
+             
+            animation: {
+                duration: 400, 
+                easing: 'out',
+            },
         };
 
-        var chart = new google.visualization.PieChart(document.getElementById('soilm'));
-        chart.draw(data, options);
-      }
-    </script>
-<!-- End Moisture Sensor Data -->
+        loadData3();
+ 
+        setInterval('loadData3()', 1230000);
 
+    }
 
-
-<!-- Ground Temp -->
-<script type='text/javascript' src='https://www.google.com/jsapi'></script>
-    <script type='text/javascript'>
-      google.load('visualization', '1', {packages:['gauge']});
-      google.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Label', 'Value'],
-          ['Ground', 33]
-        ]);
-
-        var options = {
-          redFrom: 0, redTo: 29,
-          yellowFrom:29, yellowTo: 35,
-          minorTicks: 5
-        };
-
-        var chart = new google.visualization.Gauge(document.getElementById('chart_div2'));
-        chart.draw(data, options);
-      }
-    </script>
-<!-- End Ground Temp -->
-
+</script>
 
   </head>
 
@@ -153,6 +243,9 @@ Ref: https://google-developers.appspot.com/chart/interactive/docs/gallery/piecha
         </div>
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-left">
+            <li><a href="index.html">Current Conditions</a></li>
+            <li><a href="historical.html">Historical Data</a></li>
+            <li><a href="hardware.html">Hardware Status</a></li>
             <li><a href="about.html">About</a></li>
           </ul>
           </form>
@@ -172,74 +265,46 @@ Ref: https://google-developers.appspot.com/chart/interactive/docs/gallery/piecha
 
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-          <h1 class="page-header">Current Conditions</h1>
-          <span class="text-muted">Latest weather report from the garden: </span>
+          <h1 class="page-header">Current Conditions at the Garden</h1>
+          <span class="text-muted">Latest weather report</span>
 <!-- Might be nice to reflect the last time the results were updated  date/time-->
           <div class="row placeholders">
 
-<!--Air/Ground temp Fahrenheit, GPU/CPU will be Celcius, might be nice to reflect this, but perhaps only I will care-->
-
             <div class="col-xs-6 col-sm-3 placeholder">
-              <div id="chart_div"></div>
-              <h4>Air Temp</h4>
+              <div id="chart_div1"></div>
+              <h4>Air Temp °F</h4>
               <span class="text-muted">DS18B20 Sensor</span>
             </div>
-
-            <div class="col-xs-6 col-sm-3 placeholder">
-	      <div id="chart_div1"></div>
-              <h4>Daily Air Temp High/Low/Average</h4>
-              <span class="text-muted">DS18B20 Sensor</span>
-            </div>
-
 
             <div class="col-xs-6 col-sm-3 placeholder">
               <div id="chart_div2"></div>
-              <h4>Ground Temp</h4>
+              <h4>Soil Temp °F</h4>
               <span class="text-muted">SHT11 Sensor</span>
             </div>
 
-
             <div class="col-xs-6 col-sm-3 placeholder">
-            <div id="soilm"></div>
-              <h4>Soil Moisture</h4>
+              <div id="chart_div3"></div>
+              <h4>Soil Moisture %</h4>
               <span class="text-muted">SHT11 Sensor</span>
             </div>
 
         
           </div>
+<!-- PNG Xively Calls -->
+<img src=https://api.xively.com/v2/feeds/1824193320/datastreams/air_temp.png?w=800&h=200&c=2188c5&g=true&t=Today&#39s%20Air%20Temperature%20History&b=true&duration=1day&scale=Datastream&timezone=-05&l=Internal%20Air%20Temperature%20%C2%B0F/>
+ 
+<img src=https://api.xively.com/v2/feeds/1824193320/datastreams/soil_moist.png?w=800&h=200&c=2188c5&g=true&t=Last%207%20Days%20Soil%20Moisture&b=true&duration=1week&scale=Datastream&timezone=-05&l=Internal%20Soil%20Moisture%20Percentage/>
+ <!-- Button to trigger modal -->
 
- <!-- might be a table to list temps throughout the day
-        <h2 class="sub-header">Section title</h2>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                  <th>Header</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1,015</td>
-                  <td>sodales</td>
-                  <td>ligula</td>
-                  <td>in</td>
-                  <td>libero</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>  -->
 
+
+<!-- PNG Xively Calls    -->   
+
+ 
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
     <script src="./js/docs.min.js"></script>
 

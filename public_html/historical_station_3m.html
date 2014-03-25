@@ -52,12 +52,12 @@ console.log(endOfYesterday);
 var query = { 
   start: startOfYesterday.toJSON(), 
   end: endOfYesterday.toJSON(), 
-  interval: 3600, 
+  interval: 10800, 
 // Reference https://xively.com/dev/docs/api/quick_reference/historical_data/  
   limit: 1000
 };
 
-xively.datastream.history( "1824193320", "air_temp", query, loadData);  
+xively.datastream.history( "1824193320", "rpi_case", query, loadData);  
 
 function loadData(data) {  
   var unit = data.unit.label;
@@ -171,15 +171,15 @@ function drawGraph(data, unit) {
           
           
 <ul class="nav nav-tabs">
-  <li class="active"><a href="historical.html">1 Month</a></li>
-  <li><a href="historical_air_3m.html">3 Months</a></li>
-  <li><a href="historical_air_12m.html">1 Year</a></li>
+  <li><a href="historical_station_1m.html">1 Month</a></li>
+  <li class="active"><a href="historical_station_3m.html">3 Months</a></li>
+  <li><a href="historical_station_12m.html">1 Year</a></li>
 </ul>
           <div class="row placeholders">
 
      <!-- Main Content -->
     <div id="main_content_wrap" class="outer">
-              <h4>Air Temp</h4>
+              <h4>Weather Station Enclosure Temp</h4>
       <section id="main_content" class="inner" style="height: 480px">
       <div id="chart_container" >
           <div id="chart1"></div>

@@ -52,7 +52,7 @@ console.log(endOfYesterday);
 var query = { 
   start: startOfYesterday.toJSON(), 
   end: endOfYesterday.toJSON(), 
-  interval: 3600, 
+  interval: 43200, 
 // Reference https://xively.com/dev/docs/api/quick_reference/historical_data/  
   limit: 1000
 };
@@ -171,9 +171,9 @@ function drawGraph(data, unit) {
           
           
 <ul class="nav nav-tabs">
-  <li class="active"><a href="historical.html">1 Month</a></li>
+  <li><a href="historical.html">1 Month</a></li>
   <li><a href="historical_air_3m.html">3 Months</a></li>
-  <li><a href="historical_air_12m.html">1 Year</a></li>
+  <li class="active"><a href="historical_air_12m.html">1 Year</a></li>
 </ul>
           <div class="row placeholders">
 
