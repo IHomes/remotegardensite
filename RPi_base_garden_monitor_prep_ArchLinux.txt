@@ -1,5 +1,5 @@
 ﻿#---------------------------------------------
-# RasperryPi w/Arch Linux setup for GardenPi
+# RasperryPi w/Arch Linux setup for GardenPi Base Station
 # (Post NOOBS v.1.3.3 boot into Arch Linux)
 #---------------------------------------------
 
@@ -21,6 +21,57 @@ pacman -S make
 pacman -S gcc
 pacman -S ppp
 
+
+#---------------------------------------------
+# Trying out plot.ly https://plot.ly/api/raspberrypi
+# Modified for Arch Linux
+# If GPIO analog used, this would come into play, for now, not using
+#---------------------------------------------
+
+# Arch linux details
+# This is used by plot.ly and xively
+pacman -S python2 
+cd /usr/bin
+ln -s python2 python
+cd 
+mkdir setuptools
+wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | sudo python
+cd /usr/lib/python2.7/Tools/scripts
+sudo easy_install -U distribute
+pacman -S python2-pip # had to mv conflic to _prev
+pacman -S base-devel  #select gcc
+cd setuptools
+wget https://pypi.python.org/packages/source/R/RPi.GPIO/RPi.GPIO-0.5.4.tar.gz #or latest
+tar -xvzf RPi.GPIO-0.5.4.tar.gz
+cd RPi.GPIO-0.5.4
+python2 setup.py install
+pip2 install --pre plotly
+# An analog TMP36 sensor example
+#cd 
+#git clone https://github.com/alexander-daniel/raspi-plotly.git
+
+
+# attempt of http://kempproject.blogspot.com/2014/02/plotting-hardware-stats-via-plotly.html
+# looks to be python3 .... I think
+cd /usr/bin
+unlink python
+pacman -S python
+pacman -S python-pip
+#needed since locale set to "C"?
+nano /etc/locale.gen
+#uncomment en_US.UTF-8 UTF-8
+locale-gen
+localectl set-locale LANG="en_US.utf8"
+pip install --pre plotly
+pacman -S python-psutil
+
+
+#---------------------------------------------
+# Setup vcgencmd to 
+#---------------------------------------------
+ln -s /opt/vc/bin/vcgencmd /usr/bin/vcgencmd
+
+
 #---------------------------------------------
 # Xively (python scripts), could really get away with just python2
 #---------------------------------------------
@@ -31,6 +82,7 @@ pacman -S python2-pip
 pip2 install --pre xively-python 
 pip install --pre xively-python
 
+##########From remote Pi , not sure if want on base yet
 #---------------------------------------------
 # Support for headless operations of Garden Sensors
 # ref:
@@ -38,47 +90,26 @@ pip install --pre xively-python
 # https://wiki.archlinux.org/index.php/Systemd
 #---------------------------------------------
 
-pacman -S supervisor # Will require python2-setuptools & python2-meld3
+pacman -S supervisor
 cp ./systemd_files/supervisor.service /etc/systemd/system/
+
+(replace After=ttyAmao with After=ppp-remote@.service  for base)
 
 
 
 #---------------------------------------------
 # Specifc supervisor conf for my scripts
 #
-# edit supervisord.conf add the following:
+# edit ./etc/supervisord.conf add the following:
 #---------------------------------------------
 
-[program:air_temp]
-directory=/root/garden_monitor/post_to_xively/
-command=/root/garden_monitor/post_to_xively/air_temp.py
+[program:rem_base_rssi]
+directory=/root/base_monitor/
+command=/root/base_monitor/post_rssi_xively.py
 autostart=true
 autorestart=true
 
-[program:rpi_case_temp]
-directory=/root/garden_monitor/post_to_xively/
-command=/root/garden_monitor/post_to_xively/rpi_case_temp.py
-autostart=true
-autorestart=true
-
-[program:bat_case_temp]
-directory=/root/garden_monitor/post_to_xively/
-command=/root/garden_monitor/post_to_xively/bat_case_temp.py
-autostart=true
-autorestart=true
-
-[program:soil_moisture]
-directory=/root/garden_monitor/post_to_xively/
-command=/root/garden_monitor/post_to_xively/soil_moisture.py
-autostart=true
-autorestart=true
-
-[program:soil_temp]
-directory=/root/garden_monitor/post_to_xively/
-command=/root/garden_monitor/post_to_xively/soil_temp.py
-autostart=true
-autorestart=true
-
+#Not yet implimented
 [program:cpu_temp]
 directory=/root/garden_monitor/post_to_xively/
 command=/root/garden_monitor/post_to_xively/cpu_temp.py
@@ -130,16 +161,21 @@ python setup.py install
 
 #---------------------------------------------
 # Setup cronjobs
-# Since I didn't set up NTP yet, check every day at 2300 
+# Since I didn't set up NTP yet, check daily 
+# ----Also reseting radio link every now and again
+# -----and including plot.ly cron since is not captured elsewhere
 #---------------------------------------------
 
 EDITOR=nano;
 export EDITOR
 crontab -e
 #add the following
-0 23 * * * ntpdate -b -s -u pool.ntp.org
+* * * * * /root/plotly/simple_hardware_plotly.py > /dev/null
+0 2 * * * ntpdate -b -s -u pool.ntp.org
+0 3 * * * echo 0x00 > /sys/devices/virtual/dnt900/ttyAMA0/0x001308/UcReset
 #confirm
 crontab -l
+
 
 
 

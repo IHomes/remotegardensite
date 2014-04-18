@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -267,7 +267,10 @@ green/yellow/red based on my model Solar charge controller
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
           <h1 class="page-header">Weather Station Hardware Status</h1>
-          <span class="text-muted">A means to monitor the core hardware used in the weather station.</span>
+          <span class="text-muted">Status of core hardware used in the weather station. Raw data can be found at  
+                     <a href="https://xively.com/feeds/1824193320" target="_blank">Xively for remote</a> or
+                     <a href="https://xively.com/feeds/1246053635" target="_blank">base station</a>
+           </span> 
 
 <!-- Might be nice to reflect the last time the results were updated  date/time-->
           <div class="row placeholders">
@@ -300,11 +303,6 @@ green/yellow/red based on my model Solar charge controller
 <img src=https://api.xively.com/v2/feeds/1824193320/datastreams/bat_case.png?w=400&h=200&c=2188c5&g=true&t=Last%2024%20Hrs%20Battery%20Case%20Temp&b=true&duration=1day&scale=Datastream&timezone=-05&l=Internal%20Case%20Temperature%20%C2%B0F />
  
 <!-- PNG Xively Calls    -->   
-
-          <div class="row placeholders">
-          </div>	
-          <span class="text-muted">The following is a experiment with an interactive Plot.ly graph of the base station Raspberry Pi CPU Temp.</span>
-<iframe height="510" id="igraph" scrolling="no" seamless="seamless" src="https://plot.ly/~geekskunk/5/" width="610"></iframe>
 
 
  

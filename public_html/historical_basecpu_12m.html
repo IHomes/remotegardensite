@@ -38,7 +38,7 @@
 
   </head>
 
-<script>
+<!-- <script>
 
 // Set your API key first  
 xively.setKey( "hKcMzj9z2zXxwSKr8pvvyCdrsKnhdajFA7ocUt8xWLJOjsA8" );  
@@ -113,7 +113,7 @@ function drawGraph(data, unit) {
 
   yAxis.render();
 }
-</script>
+</script> -->
   <body>
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
@@ -173,26 +173,20 @@ function drawGraph(data, unit) {
 <ul class="nav nav-tabs">
   <li><a href="historical_basecpu_1m.html">1 Month</a></li>
   <li><a href="historical_basecpu_3m.html">3 Months</a></li>
-  <li class="active"><a href="historical_basecpu_12m.html">1 Year</a></li>
+  <li class="active"><a href="historical_basecpu_12m.html">All Time</a></li>
 </ul>
           <div class="row placeholders">
 
      <!-- Main Content -->
     <div id="main_content_wrap" class="outer">
-              <h4>Base Station CPU Temp</h4>
-      <section id="main_content" class="inner" style="height: 480px">
-      <div id="chart_container" >
-          <div id="chart1"></div>
-          <div id="legend_container">
-            <div id="smoother" title="Smoothing"></div>
-            <div id="legend"></div>
+              <!-- <h4>Base Station CPU Temp</h4>-->	
+          <span class="text-muted">The following is a experiment with an interactive Plot.ly graph of the base station Raspberry Pi CPU Temp.</span>
+<iframe height="510" id="igraph" scrolling="no" seamless="seamless" src="https://plot.ly/~geekskunk/5/" width="810"></iframe>
           </div>
           <div id="slider"></div>
       </div>
-
       </section> 
-          <p>Historical graphs powered by <a href="https://github.com/jasonneylon/xively-rickshaw" target="_blank">xively-rickshaw</a></p>   
- </div>
+  </div>
          <div class="row placeholders">
           </div>	
 
