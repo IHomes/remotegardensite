@@ -82,7 +82,6 @@ pacman -S python2-pip
 pip2 install --pre xively-python 
 pip install --pre xively-python
 
-##########From remote Pi , not sure if want on base yet
 #---------------------------------------------
 # Support for headless operations of Garden Sensors
 # ref:
@@ -109,12 +108,13 @@ command=/root/base_monitor/post_rssi_xively.py
 autostart=true
 autorestart=true
 
-#Not yet implimented
 [program:cpu_temp]
-directory=/root/garden_monitor/post_to_xively/
-command=/root/garden_monitor/post_to_xively/cpu_temp.py
+directory=/root/base_monitor/
+command=/root/base_monitor/cpu_temp.py
 autostart=true
 autorestart=true
+
+
 
 systemctl enable supervisor.service
 systemctl start supervisor.service
@@ -146,7 +146,7 @@ make
 # mount /boot
 
 #---------------------------------------------
-# Not sure if really needed, pretty sure no
+# Not sure if really needed, pretty sure no...
 #---------------------------------------------
 
 pacman -S nss-mdns
@@ -162,7 +162,7 @@ python setup.py install
 #---------------------------------------------
 # Setup cronjobs
 # Since I didn't set up NTP yet, check daily 
-# ----Also reseting radio link every now and again
+# ----Also option to reset radio link every now and again
 # -----and including plot.ly cron since is not captured elsewhere
 #---------------------------------------------
 
@@ -172,7 +172,8 @@ crontab -e
 #add the following
 * * * * * /root/plotly/simple_hardware_plotly.py > /dev/null
 0 2 * * * ntpdate -b -s -u pool.ntp.org
-0 3 * * * echo 0x00 > /sys/devices/virtual/dnt900/ttyAMA0/0x001308/UcReset
+#0 3 * * * echo 0x00 > /sys/devices/virtual/dnt900/ttyAMA0/0x001308/UcReset
+# no longer reseting radio connection
 #confirm
 crontab -l
 

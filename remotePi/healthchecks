@@ -1,0 +1,13 @@
+systemctl status -l dnt900.service
+journalctl -r
+systemctl status -l ppp@base.service
+ifconfig
+
+/etc/supervisord.conf
+supervisorctl reload 
+
+#Get Time to a reasonable place
+ntpdate -b -s -u pool.ntp.org
+
+# Check for filesystem issues
+dmesg |grep fsck

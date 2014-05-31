@@ -1,0 +1,75 @@
+Current Radio Settings and cheat sheet
+
+#Lowest power settings
+cat /sys/class/dnt900/ttyAMA0/0x000506/TxPower
+echo 0x00 > /sys/class/dnt900/ttyAMA0/0x000506/TxPower && echo "0x01" > /sys/class/dnt900/ttyAMA0/0x000506/MemorySave
+echo 0x00 > /sys/class/dnt900/ttyAMA0/0x001308/TxPower && echo "0x01" > /sys/class/dnt900/ttyAMA0/0x001308/MemorySave
+
+# Highest
+cat /sys/class/dnt900/ttyAMA0/0x001308/TxPower
+echo 0x05 > /sys/class/dnt900/ttyAMA0/0x000506/TxPower && echo "0x01" > /sys/class/dnt900/ttyAMA0/0x000506/MemorySave
+echo 0x05 > /sys/class/dnt900/ttyAMA0/0x001308/TxPower && echo "0x01" > /sys/class/dnt900/ttyAMA0/0x001308/MemorySave
+
+#2 = 1152 Baud Rate
+#0x01  =  200 kb/s
+#0x00 = 500
+echo "0x00" > /sys/class/dnt900/ttyAMA0/0x000506/RF_DataRate
+echo "0x00" > /sys/class/dnt900/ttyAMA0/0x001308/RF_DataRate
+
+
+echo "0x01" > /sys/class/dnt900/ttyAMA0/0x000506/ProtocolMode
+#trying 0 on base, dont think that works...
+echo 0x00 > /sys/class/dnt900/ttyAMA0/0x001308/ProtocolMode  done
+
+#protocal
+echo 0x00 > /sys/class/dnt900/ttyAMA0/0x000506/AccessMode
+echo 0x00 > /sys/class/dnt900/ttyAMA0/0x001308/AccessMode done
+#tdma default "good for point to point"
+echo 0x02 > /sys/class/dnt900/ttyAMA0/0x000506/AccessMode
+echo 0x02 > /sys/class/dnt900/ttyAMA0/0x001308/AccessMode
+
+
+
+
+#115200
+echo 0x0004 > /sys/class/dnt900/ttyAMA0/0x000506/SerialRate 
+echo 0x0004 > /sys/class/dnt900/ttyAMA0/0x001308/SerialRate
+
+#point to point (not multi-point)
+echo 0x01 > /sys/class/dnt900/ttyAMA0/0x000506/TransPtToPtMode
+echo 0x01 > /sys/class/dnt900/ttyAMA0/0x001308/TransPtToPtMode
+
+#115200, but should not matter
+echo "0x0004" >  /sys/class/dnt900/ttyAMA0/0x000506/DiagSerialRate
+echo "0x0004" >  /sys/class/dnt900/ttyAMA0/0x001308/DiagSerialRate
+
+#attempt to set hop duration
+echo "0x00C8" > /sys/class/dnt900/ttyAMA0/0x000506/HopDuration
+echo "0x00C8" > /sys/class/dnt900/ttyAMA0/0x001308/HopDuration
+
+
+echo "0x01" > /sys/class/dnt900/ttyAMA0/0x000506/MemorySave
+echo "0x01" > /sys/class/dnt900/ttyAMA0/0x001308/MemorySave
+MemorySave
+
+
+
+
+cat /sys/class/dnt900/ttyAMA0/0x000506/TxPower
+echo 0x01 > /sys/class/dnt900/ttyAMA0/0x000506/TxPower
+
+cat /sys/class/dnt900/ttyAMA0/0x001308/TxPower
+echo 0x01 > /sys/class/dnt900/ttyAMA0/0x001308/TxPower
+
+
+
+echo 0x02 > /sys/class/dnt900/ttyAMA0/0x000506/RF_DataRate
+echo 0x02 > /sys/class/dnt900/ttyAMA0/0x001308/RF_DataRate
+
+echo 0x02 > /sys/class/dnt900/ttyAMA0/0x000506/MemorySave
+echo 0x02 > /sys/class/dnt900/ttyAMA0/0x001308/MemorySave
+MemorySave
+
+
+
+
