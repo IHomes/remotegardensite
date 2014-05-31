@@ -3,7 +3,7 @@
 /*
 Raspberry Pi SHT1x communication library.
 By:      John Burns (www.john.geek.nz)
-Date:    14 August 2012
+Date:    01 November 2012
 License: CC BY-SA v3.0 - http://creativecommons.org/licenses/by-sa/3.0/
 
 This is a derivative work based on
@@ -11,6 +11,7 @@ This is a derivative work based on
 	By: Daesung Kim
 	Date: 04/04/2011
 	Source: http://www.theniceguy.net/2722
+	License: Unknown - Attempts have been made to contact the author
 
 Dependencies:
 	BCM2835 Raspberry Pi GPIO Library - http://www.open.com.au/mikem/bcm2835/
@@ -32,7 +33,6 @@ Note:
 #include <bcm2835.h>
 #include <stdio.h>
 #include "RPi_SHT1x.h"
-#include <time.h>
 
 void printTempAndHumidity(void)
 {
@@ -80,24 +80,24 @@ void printTempAndHumidity(void)
 	// Calculate Temperature and Humidity
 	SHT1x_Calc(&humi_val.f, &temp_val.f);
 
-	//Print the Humidity to the console
-	//printf("%0.2f\n",humi_val.f);
+	//Print the Temperature to the console
+	//printf("Temperature: %0.2f%cC\n",temp_val.f,0x00B0);
 
+	//Print the Humidity to the console
+	//printf("Humidity: %0.2f%%\n",humi_val.f);
+	//Calculate and print the Dew Point
+	float fDewPoint;
+	SHT1x_CalcDewpoint(humi_val.f ,temp_val.f, &fDewPoint);
+	//printf("Dewpoint: %0.2f%cC\n",fDewPoint,0x00B0);
 
 FILE *file;
 file = fopen("lastread_soil_temp.out","w");
 fprintf(file,"%0.2f\n",temp_val.f);
 fclose(file);
-
 }
-
-
-
-
 
 int main ()
 {
-
 	//Initialise the Raspberry Pi GPIO
 	if(!bcm2835_init())
 		return 1;

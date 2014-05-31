@@ -1,7 +1,7 @@
 /*
 Raspberry Pi SHT1x communication library.
 By:      John Burns (www.john.geek.nz)
-Date:    14 August 2012
+Date:    01 November 2012
 License: CC BY-SA v3.0 - http://creativecommons.org/licenses/by-sa/3.0/
 
 This is a derivative work based on
@@ -9,6 +9,7 @@ This is a derivative work based on
 	By: Daesung Kim
 	Date: 04/04/2011
 	Source: http://www.theniceguy.net/2722
+	License: Unknown - Attempts have been made to contact the author
 */
 
 #ifndef RPI_SHT1x_H_
@@ -18,6 +19,7 @@ This is a derivative work based on
 #include <bcm2835.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <math.h>
 
 // Defines
 #define	TRUE	1
@@ -66,5 +68,6 @@ void SHT1x_Reset();
 unsigned char SHT1x_Mirrorbyte(unsigned char value);
 void SHT1x_Xrc_check(unsigned char value);
 void SHT1x_Calc(float *p_humidity ,float *p_temperature);
+void SHT1x_CalcDewpoint(float fRH,float fTemp, float *fDP);
 #endif
 

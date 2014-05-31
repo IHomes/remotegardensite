@@ -1,7 +1,7 @@
 /*
 Raspberry Pi SHT1x communication library.
 By:      John Burns (www.john.geek.nz)
-Date:    14 August 2012
+Date:    01 November 2012
 License: CC BY-SA v3.0 - http://creativecommons.org/licenses/by-sa/3.0/
 
 This is a derivative work based on
@@ -9,6 +9,7 @@ This is a derivative work based on
 	By: Daesung Kim
 	Date: 04/04/2011
 	Source: http://www.theniceguy.net/2722
+	License: Unknown - Attempts have been made to contact the author
 */
 
 #include "RPi_SHT1x.h"
@@ -207,26 +208,47 @@ unsigned char SHT1x_Get_Measure_Value( unsigned short int * value )
 void SHT1x_Calc(float *p_humidity ,float *p_temperature)
 //----------------------------------------------------------------------------------------
 {
-	const float C1=-4.0;              		// for 12 Bit
-	const float C2=+0.0405;           		// for 12 Bit
-	const float C3=-0.0000028;        		// for 12 Bit
-	const float T1=+0.01;             		// for 14 Bit @ 5V
-	const float T2=+0.00008;           		// for 14 Bit @ 5V	
+	const float C1=-2.0468;            		// for 12 Bit
+	const float C2=+0.0367;           		// for 12 Bit
+	const float C3=-0.0000015955;      		// for 12 Bit
+	const float T1=+0.01;             		// for 12 Bit
+	const float T2=+0.00008;           		// for 12 Bit
 
-	float rh = *p_humidity;             	// rh:      Humidity [Ticks] 12 Bit 
+	const float	D1 = -39.66;			// For 3.3 Volt power supply, Centigrade
+	const float	D2 = 0.01;			// For 14 Bit temperature, Centigrade
+
+	float rh = *p_humidity;             		// rh:      Humidity [Ticks] 12 Bit 
 	float t = *p_temperature;          		// t:       Temperature [Ticks] 14 Bit
 	float rh_lin;                     		// rh_lin:  Humidity linear
 	float rh_true;                    		// rh_true: Temperature compensated humidity
 	float t_C;                        		// t_C   :  Temperature [C]
 
-	//t_C = t*0.01 - 40;                  	// calc. temperature from ticks to [C]
-        t_C = t*0.01 - 39.35;                      // calc. temperature from ticks to [C]
-	rh_lin = C3*rh*rh + C2*rh + C1;     	// calc. humidity from ticks to [%RH]
-	rh_true = (t_C-25)*(T1+T2*rh)+rh_lin;   // calc. temperature compensated humidity [%RH]
-	if(rh_true>100)	rh_true=100;       		// cut if the value is outside of
+	t_C = D1 + (D2 * t);                  		// calc. temperature from ticks to [C]
+	rh_lin = C1 + (C2 * rh) + (C3 * rh * rh);	// calc. humidity from ticks to [%RH]
+	rh_true = (t_C - 25) *(T1 + (T2 * rh)) + rh_lin;// calc. temperature compensated humidity [%RH]
+	if(rh_true>100) rh_true=100;       		// cut if the value is outside of
 	if(rh_true<0.1)	rh_true=0.1;       		// the physical possible range
-        t_C = t_C*9/5 + 32;                     // hacking in Farenheit
-	*p_temperature = t_C;               	// return temperature [F]
-	*p_humidity = rh_true;              	// return humidity[%RH]
+        t_C = t_C*9/5 + 32;                             // hacking in Farenheit
+	*p_temperature = t_C;               		// return temperature [C]
+	*p_humidity = rh_true;              		// return humidity[%RH]
 }
 
+//----------------------------------------------------------------------------------------
+void SHT1x_CalcDewpoint(float fRH ,float fTemp, float *fDP)
+//----------------------------------------------------------------------------------------
+// Calculates Dewpoint based on Page 9 (v5, Dec 2011) of SHT1x Datasheet
+{
+	// Set some constants for the temperature range
+	float Tn = 243.12;
+	float m = 17.62;
+	if (fTemp < 0)
+	{
+		Tn = 272.62;
+		m = 22.46;
+	}
+	//not using this, but original code was float lnRH = log(fRH/100); but would not compile
+        float lnRH = 2*(fRH/100);
+	float mTTnT = (m * fTemp)/(Tn+fTemp);
+	
+	*fDP = Tn * ((lnRH + mTTnT)/(m - lnRH - mTTnT));
+}
