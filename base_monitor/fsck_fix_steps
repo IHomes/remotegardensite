@@ -1,0 +1,6 @@
+dmesg|grep fsck
+cd dosfstools
+umount /boot
+./fsck.fat -V /dev/ <put in mm...>
+./fsck.fat -a /dev/  "
+mount /boot

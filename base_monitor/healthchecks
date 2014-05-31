@@ -1,0 +1,32 @@
+systemctl status -l dnt900.service
+ls -l /dev/ttyDNT*
+journalctl -r | grep minutes
+
+cat /sys/class/dnt900/ttyAMA0/0x001308/rssi
+
+ssh -v -C -c blowfish remotepi
+
+ls -ltrh /var/log
+
+systemctl start supervisor.service
+
+
+systemctl status -l ppp-remote@ttyDNT1.service
+systemctl stop ppp-remote@ttyDNT1.service
+systemctl start ppp-remote@ttyDNT1.service
+
+/etc/supervisord.conf
+supervisorctl restart rem_base_rssi
+supervisorctl restart cpu_temp
+supervisorctl restart bat_volt
+
+echo "0x01" > /sys/class/dnt900/ttyAMA0/0x001308/MemorySave
+
+echo 0 > /sys/class/dnt900/0x001308/GPIO5  # power down the Raspberry Pi
+echo 1 > /sys/class/dnt900/0x001308/GPIO5  # boot up the Raspberry Pi
+
+ssh root@remotepi 'supervisorctl restart soil_moisture'
+
+ssh root@remotepi '/opt/vc/bin/tvservice -off'
+
+ssh root@remotepi 'echo 0x0 > /sys/devices/platform/bcm2708_usb/buspower'
