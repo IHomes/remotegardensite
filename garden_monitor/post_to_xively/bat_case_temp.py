@@ -1,5 +1,5 @@
 #!/usr/bin/env python2
-
+#taking the battery sensor and making it the new soil sensor
 import os
 import xively
 import subprocess
@@ -34,14 +34,14 @@ def read_loadavg():
 # or returns an existing one
 def get_datastream(feed):
   try:
-    datastream = feed.datastreams.get("bat_case")
+    datastream = feed.datastreams.get("soil_temp")
     if DEBUG:
       print "Found existing datastream"
     return datastream
   except:
     if DEBUG:
       print "Creating new datastream"
-    datastream = feed.datastreams.create("bat_case", tags="bat_01")
+    datastream = feed.datastreams.create("soil_temp", tags="soil_02")
     return datastream
 
 # main program entry point - runs continuously updating the datastream
@@ -55,17 +55,17 @@ def run():
 
   while True:
     execfile("/root/garden_monitor/battery_case_temp/gather_battery_case_temp.py")
-    bat_case = read_loadavg()
+    soil_temp = read_loadavg()
 
     if DEBUG:
       print "Updating Xively feed with value: %s" % bat_case
 
-    datastream.current_value = bat_case
+    datastream.current_value = soil_temp
     datastream.at = datetime.datetime.utcnow()
     try:
       datastream.update()
     except requests.HTTPError as e:
       print datetime.datetime.now() , "HTTPError({0}): {1}".format(e.errno, e.strerror)
-    time.sleep(300)
+    time.sleep(21600)
 
 run()

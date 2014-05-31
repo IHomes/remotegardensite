@@ -65,6 +65,6 @@ def run():
       datastream.update()
     except requests.HTTPError as e:
       print datetime.datetime.now() , "HTTPError({0}): {1}".format(e.errno, e.strerror)
-    time.sleep(600)
+    time.sleep(21600)
 
 run()
