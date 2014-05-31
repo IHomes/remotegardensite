@@ -41,7 +41,7 @@
 <script>
 
 // Set your API key first  
-xively.setKey( "KBDxZyb8EQlldInIuUBITlC92ABbcqjo0QGU4hzS8wW2w6hz" );  
+xively.setKey( "1YxoXJzbLbVhxaDoVQkOTd3Br8ZQc3m5B7nx6JF4HNzri9R1" );  
 
 var startOfYesterday = moment().subtract("day", 31).startOf('day');
 var endOfYesterday = moment().startOf('day');
@@ -75,6 +75,7 @@ function drawGraph(data, unit) {
   var graph = new Rickshaw.Graph( {
     element: document.querySelector("#chart1"),
     width: 640,
+    min: 10,
     height: 400,
     renderer: 'line',
     series: [
@@ -164,6 +165,8 @@ function drawGraph(data, unit) {
     <li><a href="historical_soilm_1m.html">Soil Moisture</a></li>
     <li><a href="historical_station_1m.html">Station Case</a></li>
     <li><a href="historical_bat_1m.html">Battery Case</a></li>
+    <li><a href="historical_volt_1m.html">Battery Voltage</a></li>
+    <li><a href="historical_rssi_1m.html">Remote RSSI</a></li>
     <li><a href="historical_remcpu_1m.html">Remote RPi CPU</a></li>
     <li><a href="historical_basecpu_1m.html">Base RPi CPU</a></li>  
   </ul>
@@ -189,9 +192,8 @@ function drawGraph(data, unit) {
           </div>
           <div id="slider"></div>
       </div>
-
-      </section>
-                <p>Historical graphs powered by <a href="https://github.com/jasonneylon/xively-rickshaw" target="_blank">xively-rickshaw</a></p>    
+     </section>
+               <p>Historical graphs powered by <a href="https://github.com/jasonneylon/xively-rickshaw" target="_blank">xively-rickshaw</a></p>    
  </div>
          <div class="row placeholders">
           </div>	

@@ -36,10 +36,12 @@
     var chart1; //rpi cpu temp
     var chart2; //station case temp
     var chart3; //battery case temp
+    var chart4; //remote battery voltage
     
     var data1;
     var data2;
     var data3;
+    var data4;
  
     function displayData1(point) {
      
@@ -164,6 +166,7 @@ green/yellow/red yet to be determined, these values estimates at this point
        initChart1();
        initChart2();
        initChart3();
+       initChart4();
     }
     
     function displayData3(point) {
@@ -225,6 +228,67 @@ green/yellow/red based on my model Solar charge controller
         setInterval('loadData3()', 1230000);
 
     }
+    
+    function displayData4(point) {
+        data4.setValue(0, 0, 'Volts');
+        data4.setValue(0, 1, point);    
+        chart4.draw(data4, options4);  
+    }
+
+    function loadData4() {
+        // variable for the data point
+        var p;
+     
+        $.getJSON('https://api.xively.com/v2/feeds/1824193320/datastreams/bat_voltage.json?&key=hKcMzj9z2zXxwSKr8pvvyCdrsKnhdajFA7ocUt8xWLJOjsA8&callback=?', function(data) {
+            // get the data point from Xively
+            p = data.current_value;
+
+            if (p) {
+                p = (p/1);
+                displayData4(p);
+            }
+        });
+    }
+
+    function initChart4() {
+        data4 = new google.visualization.DataTable();
+        data4.addColumn('string', 'Label');
+        data4.addColumn('number', 'Value');
+        data4.addRows(1);
+
+        chart4 = new google.visualization.Gauge(document.getElementById('chart_div4'));
+/*
+Battery Voltage
+green/yellow/red based on solar controller and rpi900 tolerances
+*/
+        options4 = {
+         
+            redFrom: 10, 
+            redTo: 10.8,
+             
+            yellowFrom: 10.8, 
+            yellowTo: 11.5, 
+            
+            greenFrom: 11.5, 
+            greenTo: 15, 
+             
+            minorTicks: 10,
+             
+            min: 10, 
+            max: 15, 
+             
+            animation: {
+                duration: 900, 
+                easing: 'out',
+            },
+        };
+
+        loadData4();
+ 
+        setInterval('loadData3()', 1230000);
+
+    }
+
 
 </script>
 
@@ -293,16 +357,27 @@ green/yellow/red based on my model Solar charge controller
               <span class="text-muted">DS18B20 temperature sensor located in battery enclosure</span>
             </div>
 
+          <div class="col-xs-6 col-sm-3 placeholder">
+	      <div id="chart_div4"></div>
+              <h4>Battery Voltage V</h4>
+              <span class="text-muted">ADC2 RPI900 sensor located in weather station enclosure</span>
+            </div>
+
    
           </div>
 
 
-<!-- PNG Xively Calls
-<img src=https://api.xively.com/v2/feeds/1824193320/datastreams/rpi_case.png?w=400&h=200&c=2188c5&g=true&t=Last%2024%20Hrs%20Weather%20Station%20Case%20Temp&b=true&duration=1day&scale=Datastream&timezone=-05&l=Internal%20Case%20Temperature%20%C2%B0F />
+<!-- PNG Xively Calls -->
+
+<img src=https://api.xively.com/v2/feeds/1824193320/datastreams/bat_voltage.png?w=800&h=200&c=2188c5&g=true&t=Last%2024%20Hrs%20Battery%20Voltage&b=true&duration=1day&scale=Datastream&timezone=-05&l=Battery%20Voltage>
  
+
+<!-- unused at the moment
+<img src=https://api.xively.com/v2/feeds/1824193320/datastreams/bat_case.png?w=400&h=200&c=2188c5&g=true&t=Last%2024%20Hrs%20Weather%20Station%20Case%20Temp&b=true&duration=1day&scale=Datastream&timezone=-05&l=Internal%20Case%20Temperature%20%C2%B0F />
+
 <img src=https://api.xively.com/v2/feeds/1824193320/datastreams/bat_case.png?w=400&h=200&c=2188c5&g=true&t=Last%2024%20Hrs%20Battery%20Case%20Temp&b=true&duration=1day&scale=Datastream&timezone=-05&l=Internal%20Case%20Temperature%20%C2%B0F />
  
-<!-- PNG Xively Calls    -->   
+  -->   
 
 
  

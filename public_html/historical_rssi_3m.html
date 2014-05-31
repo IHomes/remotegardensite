@@ -41,7 +41,7 @@
 <script>
 
 // Set your API key first  
-xively.setKey( "hKcMzj9z2zXxwSKr8pvvyCdrsKnhdajFA7ocUt8xWLJOjsA8" );  
+xively.setKey( "1YxoXJzbLbVhxaDoVQkOTd3Br8ZQc3m5B7nx6JF4HNzri9R1" );  
 
 var startOfYesterday = moment().subtract("day", 31).startOf('day');
 var endOfYesterday = moment().startOf('day');
@@ -52,12 +52,12 @@ console.log(endOfYesterday);
 var query = { 
   start: startOfYesterday.toJSON(), 
   end: endOfYesterday.toJSON(), 
-  interval: 3600, 
+  interval: 10800, 
 // Reference https://xively.com/dev/docs/api/quick_reference/historical_data/  
   limit: 1000
 };
 
-xively.datastream.history( "1824193320", "soil_moist", query, loadData);  
+xively.datastream.history( "1246053635", "rem_base_rssi", query, loadData);  
 
 function loadData(data) {  
   var unit = data.unit.label;
@@ -75,8 +75,9 @@ function drawGraph(data, unit) {
   var graph = new Rickshaw.Graph( {
     element: document.querySelector("#chart1"),
     width: 640,
+    min: -110,
     height: 400,
-    renderer: 'bar',
+    renderer: 'line',
     series: [
       {
         data: data,
@@ -173,15 +174,15 @@ function drawGraph(data, unit) {
           
           
 <ul class="nav nav-tabs">
-  <li class="active"><a href="historical_soilm_1m.html">1 Month</a></li>
-  <li><a href="historical_soilm_3m.html">3 Months</a></li>
-  <li><a href="historical_soilm_12m.html">1 Year</a></li>
+  <li><a href="historical_rssi_1m.html">1 Month</a></li>
+  <li class="active"><a href="historical_rssi_3m.html">3 Months</a></li>
+  <li><a href="historical_rssi_12m.html">12 Months</a></li>
 </ul>
           <div class="row placeholders">
 
-     <!-- Main Content -->
+      <!-- Main Content -->
     <div id="main_content_wrap" class="outer">
-              <h4>Soil Moisture</h4>
+              <h4>Base Station Received Signal Strength Indicator (RSSI)</h4>
       <section id="main_content" class="inner" style="height: 480px">
       <div id="chart_container" >
           <div id="chart1"></div>
@@ -191,9 +192,8 @@ function drawGraph(data, unit) {
           </div>
           <div id="slider"></div>
       </div>
-
-      </section>
-           <p>Historical graphs powered by <a href="https://github.com/jasonneylon/xively-rickshaw" target="_blank">xively-rickshaw</a></p>    
+     </section>
+               <p>Historical graphs powered by <a href="https://github.com/jasonneylon/xively-rickshaw" target="_blank">xively-rickshaw</a></p>    
  </div>
          <div class="row placeholders">
           </div>	
