@@ -166,7 +166,7 @@ green/yellow/red yet to be determined, these values estimates at this point
     }
     
     function displayData3(point) {
-        data3.setValue(0, 0, 'Moisture');
+        data3.setValue(0, 0, 'Humidity');
         data3.setValue(0, 1, point);    
         chart3.draw(data3, options3);  
     }
@@ -280,12 +280,13 @@ green/yellow/red based on my model Solar charge controller
             <div class="col-xs-6 col-sm-3 placeholder">
               <div id="chart_div2"></div>
               <h4>Soil Temp °F</h4>
-              <span class="text-muted">SHT11 Sensor</span>
+              <span class="text-muted">DS18B20 Sensor</span>
             </div>
+<!-- Using prior battery temp monitor now as soil sensor -->
 
             <div class="col-xs-6 col-sm-3 placeholder">
               <div id="chart_div3"></div>
-              <h4>Soil Moisture %</h4>
+              <h4>Air Humidity %</h4>
               <span class="text-muted">SHT11 Sensor</span>
             </div>
           </div>
@@ -296,8 +297,8 @@ green/yellow/red based on my model Solar charge controller
 <!-- PNG Xively Calls -->
 <img src=https://api.xively.com/v2/feeds/1824193320/datastreams/air_temp.png?w=800&h=200&c=2188c5&g=true&t=Last%2024Hrs%20Air%20Temperature%20History&b=true&duration=1day&scale=Datastream&timezone=-05&l=Air%20Temperature%20%C2%B0F>
  
-
-<img src=https://api.xively.com/v2/feeds/1824193320/datastreams/soil_moist.png?w=800&h=200&c=2188c5&g=true&t=Last%207%20Days%20Soil%20Moisture&b=true&duration=1week&scale=Datastream&timezone=-05&l=Soil%20Moisture%20Percentage>
+<!-- Now using soil sensor for air Humidity    -->  
+<img src=https://api.xively.com/v2/feeds/1824193320/datastreams/soil_moist.png?w=800&h=200&c=2188c5&g=true&t=Last%207%20Days%20Humidity&b=true&duration=1week&scale=Datastream&timezone=-05&l=Humidity%20Percentage>
  <!-- Button to trigger modal -->
 
 <!-- PNG Xively Calls    -->   

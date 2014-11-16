@@ -65,7 +65,7 @@ function loadData(data) {
   var filtedData = data.datapoints.filter(function(x) { return (x.value < 10000); });
   for (var i=0; i < filtedData.length; i++ ) {
     var date = moment(filtedData[i].at);
-    var value = parseInt(filtedData[i].value);
+    var value = parseFloat(filtedData[i].value);
     series[i] = {x: date.unix(), y: value};
   }
   drawGraph(series, unit);
@@ -75,7 +75,8 @@ function drawGraph(data, unit) {
   var graph = new Rickshaw.Graph( {
     element: document.querySelector("#chart1"),
     width: 640,
-    min: 10,
+    min: 11.40,
+    max: 14.60,
     height: 400,
     renderer: 'line',
     series: [
